@@ -4,7 +4,15 @@ import './App.css'
 const RANDOM_QUOTE_API_URL = import.meta.env.VITE_RANDOM_QUOTE_API_URL
 
 const Timer = () => {
-    return <div className="timer">0</div>;
+    const [timer, setTimer] = useState(0)
+    useEffect(() => {
+        const timerId = setInterval(() => {
+            setTimer(prevTimer => prevTimer + 1)
+        }, 1000)
+
+        return () => clearInterval(timerId)
+    }, []);
+    return <div className="timer">{timer}</div>;
 }
 
 async function getRandomQuote() {
