@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {ChangeEvent, useEffect, useState} from 'react'
 import './App.css'
 
 const RANDOM_QUOTE_API_URL = import.meta.env.VITE_RANDOM_QUOTE_API_URL
@@ -21,7 +21,7 @@ async function getRandomQuote() {
         .then(response => response.json())
         .then(data => data.content)
 }
-const Quote = () => {
+const Quote = (props:{typedText: string}) => {
     const [quote, setQuote] = useState("")
     useEffect(() => {
         getRandomQuote().then(quote => setQuote(quote))
@@ -30,8 +30,10 @@ const Quote = () => {
     return (
         <div className="quote-display">
             {
-                quote.split("").map((character: string) => {
-                        return (<span id={`character-${index++}`}>{character}</span>)
+                quote.split("").map((character: string, idx: number) => {
+                        const reached = idx < props.typedText.length
+                        const correct = reached && character == props.typedText.charAt(idx)
+                        return (<span id={`character-${index++}`} className={!reached ? "" : correct ? "correct" : "incorrect"}>{character}</span>)
                     }
                 )
             }
@@ -39,19 +41,24 @@ const Quote = () => {
     )
 };
 
-const TypeIt = () => {
+const TypeIt = ({onChange}: { onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void }) => {
     return (
-        <textarea id="teypeit" autoFocus className="quote-input">
-            U Type It
+        <textarea id="typeIt"
+                  autoFocus className="quote-input"
+                  onChange={ onChange }
+        >
+
         </textarea>
     )
 };
 
 const Main = () => {
+    const [typedText, setTypedText] = useState("")
+    const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => setTypedText(event.target.value)
     return (
         <div className="card">
-            <Quote/>
-            <TypeIt/>
+            <Quote typedText={typedText}/>
+            <TypeIt onChange={onChange}/>
         </div>
     );
 }
