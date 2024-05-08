@@ -6,8 +6,9 @@ const RANDOM_QUOTE_API_URL = import.meta.env.VITE_RANDOM_QUOTE_API_URL
 const Timer = () => {
     const [timer, setTimer] = useState(0)
     useEffect(() => {
+        const startTime = new Date()
         const timerId = setInterval(() => {
-            setTimer(prevTimer => prevTimer + 1)
+            setTimer(() => Math.floor((new Date() - startTime) / 1000))
         }, 1000)
 
         return () => clearInterval(timerId)
