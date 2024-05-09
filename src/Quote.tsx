@@ -1,30 +1,19 @@
-import {useEffect, useState} from "react";
-
 export const RANDOM_QUOTE_API_URL = import.meta.env.VITE_RANDOM_QUOTE_API_URL
 
-async function getRandomQuote() {
-    return fetch(RANDOM_QUOTE_API_URL)
-        .then(response => response.json())
-        .then(data => data.content)
-}
-
-export const Quote = (props: { typedText: string }) => {
-    const [quote, setQuote] = useState("")
-    useEffect(() => {
-        getRandomQuote().then(quote => setQuote(quote))
-    }, [])
-    let index = 0
+export const Quote = (props: { quote:string; typedText: string; }) => {
+    let [score, missed] = [0, 0]
     return (
         <div className="quote-display">
-            {
-                quote.split("").map((character: string, idx: number) => {
-                        const reached = idx < props.typedText.length
-                        const correct = reached && character == props.typedText.charAt(idx)
-                        return (<span id={`character-${index++}`}
-                                      className={!reached ? "" : correct ? "correct" : "incorrect"}>{character}</span>)
-                    }
-                )
-            }
+            {props.quote.split("").map((character: string, idx: number) => {
+                const reached = idx < props.typedText.length
+                const correct = reached && character == props.typedText.charAt(idx)
+                if (reached) {
+                    score = correct ? score + 1 : score
+                    missed = correct ? missed : missed + 1
+                }
+                return (<span id={`character-${idx}`}
+                              className={!reached ? "" : correct ? "correct" : "incorrect"}>{character}</span>)
+            })}
         </div>
     )
 };

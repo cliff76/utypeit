@@ -58,6 +58,24 @@ body, .quote-input {
   font-weight: bold;
 }
 
+.score {
+  position: absolute;
+  top: 2rem;
+  right: 43rem;
+  font-size: 3rem;
+  color: forestgreen;
+  font-weight: bold;
+}
+
+.missed {
+  position: absolute;
+  top: 2rem;
+  right: 60rem;
+  font-size: 3rem;
+  color: red;
+  font-weight: bold;
+}
+
 .quote-display {
   margin-bottom: 1rem;
   margin-left: calc(1rem + 2px);
